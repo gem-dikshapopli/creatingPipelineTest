@@ -1,0 +1,21 @@
+environment: beta
+report_name: pipelineCreation
+feature: src/test/resources/feature/sample.feature
+tags: '@hello'
+jewel_screen_shots: y
+console_report: n
+email_report: n
+event_firing: y
+email_to:
+  - diksha.popli@geminisolutions.com
+glue_code: stepDefinition
+beta:
+  browser_name: edge
+  launch_url: https://www.google.com/
+  Login: https://apis-beta.gemecosystem.com/login
+  getCompanyAdmins_api: https://apis-beta.gemecosystem.com/v2/company/admins?name=GEMPERF%20PVT.%20LTD.
+  enter_point: https://betaapi.gemecosystem.com/gemEcosystemDashboard/v1/enter-point
+  jewel_user: jewel_automation_admin_user
+  jewel_bridge_token: ff38c26d-177f-4f98-aad6-4572b16308da1709285618176
+  project_name: Jewel
+  browser_timeout: 10

@@ -1,0 +1,38 @@
+trigger:
+- main  # Set the branch to trigger the pipeline on
+
+pool:
+  vmImage: 'windows-latest'  # Use a Windows agent
+
+steps:
+
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+    
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Install-Module -Name PowerShell-Yaml -Scope CurrentUser -Force
+      Import-Module PowerShell-Yaml
+      
+      $yamlFile = '$(Build.SourcesDirectory)/src/test/resources/gemjar-config.yml'
+      
+      # Read the YAML file content
+      $yamlContent = Get-Content $yamlFile -Raw | ConvertFrom-Yaml
+      
+      # Update values
+      $yamlContent.tags = '$(tags)'
+      $yamlContent.environment = '$(env)'
+      
+      # Convert back to YAML format
+      $updatedYamlContent = $yamlContent | ConvertTo-Yaml
+      
+      # Write the updated YAML content back to the file
+      Set-Content -Path $yamlFile -Value $updatedYamlContent
+
+- script: 'mvn clean test'  # Command to build and run your Selenium tests using Maven
+  displayName: 'Run Selenium Tests'
